@@ -1,5 +1,11 @@
 VirtualSMC Changelog
 ====================
+#### v1.1.3
+- Fixed compatibility with 10.15 debug kernel with traptrace enabled
+
+#### v1.1.2
+- Improved performance with Lilu 1.4.3 APIs
+
 #### v1.1.1
 - Fixed SMCSuperIO crashes with unsupported chips
 - SMCSuperIO detected chip name to ioreg
