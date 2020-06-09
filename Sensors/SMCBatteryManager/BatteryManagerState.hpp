@@ -56,6 +56,8 @@ struct BatteryInfo {
 		bool bad {false};
 		bool bogus {false};
 		bool critical {false};
+		bool batteryIsFull {true};
+		bool needUpdate {false};
 	};
 
 	/**
@@ -73,8 +75,10 @@ struct BatteryInfo {
 
 	/**
 	 *  Validate battery information and set the defaults
+	 *
+	 *  @param id        battery id
 	 */
-	void validateData();
+	void validateData(int32_t id=-1);
 };
 
 /**

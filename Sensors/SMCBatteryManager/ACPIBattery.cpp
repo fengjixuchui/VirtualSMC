@@ -83,7 +83,7 @@ bool ACPIBattery::getBatteryInfo(BatteryInfo &bi, bool extended) {
 
 	info->release();
 
-	bi.validateData();
+	bi.validateData(id);
 
 	if (!extended) {
 		// Assume battery designed for 1000 cycles
@@ -120,8 +120,6 @@ bool ACPIBattery::updateRealTimeStatus(bool quickPoll) {
 		return false;
 	}
 
-	bool batteryIsFull = false;
-
 	IOSimpleLockLock(batteryInfoLock);
 	auto st = batteryInfo->state;
 	IOSimpleLockUnlock(batteryInfoLock);
@@ -134,6 +132,12 @@ bool ACPIBattery::updateRealTimeStatus(bool quickPoll) {
 		st.presentRate = st.presentRate * 1000 / st.designVoltage;
 		st.remainingCapacity = st.remainingCapacity * 1000 / st.designVoltage;
 	}
+
+	// Sometimes this value can be either reported incorrectly or miscalculated
+	// and exceed the actual capacity. Simply workaround it by capping the value.
+	// REF: https://github.com/acidanthera/bugtracker/issues/565
+	if (st.remainingCapacity > st.lastFullChargeCapacity)
+		st.remainingCapacity = st.lastFullChargeCapacity;
 
 	// Average rate calculation
 	if (!st.presentRate || (st.presentRate == BatteryInfo::ValueUnknown)) {
@@ -176,18 +180,28 @@ bool ACPIBattery::updateRealTimeStatus(bool quickPoll) {
 	bool bogus = false;
 	switch (st.state & BSTStateMask) {
 		case BSTFullyCharged: {
-			DBGLOG("acpib", "battery %d full", id);
+			if (!st.batteryIsFull) {
+				DBGLOG("acpib", "battery %d full, need stats update", id);
+				st.needUpdate = true;
+			} else {
+				DBGLOG("acpib", "battery %d full", id);
+			}
 			st.calculatedACAdapterConnected = true;
-			batteryIsFull = true;
+			st.batteryIsFull = true;
 			st.timeToFull = 0;
 			st.signedPresentRate = st.presentRate;
 			st.signedAverageRate = st.averageRate;
 			break;
 		}
 		case BSTDischarging: {
-			DBGLOG("acpib", "battery %d discharging", id);
+			if (st.calculatedACAdapterConnected) {
+				DBGLOG("acpib", "battery %d discharging, need stats update", id);
+				st.needUpdate = true;
+			} else {
+				DBGLOG("acpib", "battery %d discharging", id);
+			}
 			st.calculatedACAdapterConnected = false;
-			batteryIsFull = false;
+			st.batteryIsFull = false;
 			st.timeToFull = 0;
 			st.signedPresentRate = -st.presentRate;
 			st.signedAverageRate = -st.averageRate;
@@ -196,7 +210,7 @@ bool ACPIBattery::updateRealTimeStatus(bool quickPoll) {
 		case BSTCharging: {
 			DBGLOG("acpib", "battery %d charging", id);
 			st.calculatedACAdapterConnected = true;
-			batteryIsFull = false;
+			st.batteryIsFull = false;
 			int diff = st.remainingCapacity < st.lastFullChargeCapacity ? st.lastFullChargeCapacity - st.remainingCapacity : 0;
 			st.timeToFull = st.averageRate ? 60 * diff / st.averageRate : 60 * diff;
 			st.signedPresentRate = st.presentRate;
@@ -205,7 +219,7 @@ bool ACPIBattery::updateRealTimeStatus(bool quickPoll) {
 		}
 		default: {
 			SYSLOG("acpib", "bogus status data from battery %d (%x)", id, st.state);
-			batteryIsFull = false;
+			st.batteryIsFull = false;
 			bogus = true;
 			break;
 		}
@@ -232,7 +246,8 @@ bool ACPIBattery::updateRealTimeStatus(bool quickPoll) {
 	batteryInfo->state = st;
 	IOSimpleLockUnlock(batteryInfoLock);
 
-	return batteryIsFull;
+	// one more poll when a stats update is needed but already full
+	return (st.needUpdate ? false : st.batteryIsFull);
 }
 
 bool ACPIBattery::updateStaticStatus(bool *calculatedACAdapterConnection) {
@@ -247,7 +262,7 @@ bool ACPIBattery::updateStaticStatus(bool *calculatedACAdapterConnection) {
 
 		bool connected = (acpi & 0x10) ? true : false;
 		IOSimpleLockLock(batteryInfoLock);
-		if (connected == batteryInfo->connected) {
+		if (connected == batteryInfo->connected && !batteryInfo->state.needUpdate) {
 			// No status change, most likely, just continue
 			if (calculatedACAdapterConnection)
 				*calculatedACAdapterConnection = batteryInfo->state.calculatedACAdapterConnected;
@@ -274,7 +289,7 @@ bool ACPIBattery::updateStaticStatus(bool *calculatedACAdapterConnection) {
 			*batteryInfo = bi;
 			IOSimpleLockUnlock(batteryInfoLock);
 
-			DBGLOG("acpib", "battery %d connected -> %d", id, bi.connected);
+			DBGLOG("acpib", "battery %d connected or updated -> %d", id, bi.connected);
 		}
 
 		return connected;
