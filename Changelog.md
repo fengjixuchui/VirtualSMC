@@ -5,6 +5,8 @@ VirtualSMC Changelog
 - Fixed B0PS and B0St key size to resolve broken fully charged state
 - Fixed sometimes stuck battery update thx to @zhen-zen
 - Added workaround for kBRemainingCapacityCmd exceeding kBFullChargeCapacityCmd
+- Added preliminary 11.0 support
+- Fixed SMCProcessor model detection warning
 
 #### v1.1.4
 - Fixed incorrect revision reporting on T2 models (e.g. Macmini8,1)
