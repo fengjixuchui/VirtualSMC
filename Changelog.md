@@ -1,5 +1,10 @@
 VirtualSMC Changelog
 ====================
+#### 1.1.6
+- Added battery supplement info, thx @zhen-zen
+- Fix audio lags in Safari caused by reading SMM in SMCDellSensors plugin
+- Fix module version for SMCDellSensors, SMCBatteryManager and SMCLightSensor
+
 #### v1.1.5
 - Improved CHLC key value reporting
 - Fixed B0PS and B0St key size to resolve broken fully charged state
@@ -7,6 +12,11 @@ VirtualSMC Changelog
 - Added workaround for kBRemainingCapacityCmd exceeding kBFullChargeCapacityCmd
 - Added preliminary 11.0 support
 - Fixed SMCProcessor model detection warning
+- Fixed legacy smc tool value calculation
+- Fixed running smcread on 11.0 without IOKit framework
+- Added a new plugin SMCDellSensors for Temp/FAN monitor/control
+- Added basic SMCBatteryManager compatibility with 11.0
+- Fixed crashes when trying to read CLKT key
 
 #### v1.1.4
 - Fixed incorrect revision reporting on T2 models (e.g. Macmini8,1)
