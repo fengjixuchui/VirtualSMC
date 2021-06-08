@@ -1,9 +1,45 @@
 VirtualSMC Changelog
 ====================
+#### v1.2.5
+- Added preliminary 12.0 support
+
+#### v1.2.4
+- Added support for NCT6683D series
+
+#### v1.2.3
+- Fixed Intel NUC EC sensors not showing proper values on some platforms
+- Added `generic` EC sensor type
+- Added EC fan monitoring support on `HP Pavilion 14 CE2072NL`, thx @1alessandro1
+
+#### v1.2.2
+- Improve manual fan control in SMCDellSensors (SMM access is enabled even if audio is played)
+- Fixed sensor DEBUG logging with `-liludbgall` argument
+- Improved startup performance when probing SuperIO chips by splitting vendors
+- Added SuperIO device activation when it is disabled on probe
+- Added support for Nuvoton NCT6796D-E (0xD42A)
+- Added support for ITE IT8987 (requires DEBUG firmware, not available for public)
+- Added Intel NUC monitoring (requires manual configuration via `ec-device`, see `EmbeddedControllers.md`)
+
+#### v1.2.1
+- Fix version publishing for VirtualSMC and plugins
+
+#### v1.2.0
+- Improve manual fan control in SMCDellSensors (switch off manual control before going to sleep), rename control boot-args (start with -dell)
+
+#### v1.1.9
+- Improve manual fan control in SMCDellSensors (use control registers 0x35a3 and 0x34a3 to cover more Dell models)
+- Fix processKext in SMCDellSensors (could be called multiple times for the same kext since flag Reloadable was set)
+- Reduce audio lags in SMCDellSensors when USB audio device is used
+- Allow not injecting TB0T SMC key when it is unavailable in SMCBatteryManager
+
+#### v1.1.8
+- Reduce audio lags in SMCDellSensors
+
 #### v1.1.7
 - Added MacKernelSDK with Xcode 12 compatibility
 - Fixed SMCDellSensors loading on macOS 10.8
 - Added VirtualSMC support for 10.6 (most plugins require newer versions)
+- Fixed rare kernel panic in SMCSuperIO
 
 #### v1.1.6
 - Added battery supplement info, thx @zhen-zen

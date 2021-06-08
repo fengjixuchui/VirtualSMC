@@ -9,6 +9,7 @@
 
 #include <VirtualSMCSDK/kern_vsmcapi.hpp>
 #include <Headers/kern_time.hpp>
+#include <Headers/kern_version.hpp>
 #include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/IOTimerEventSource.h>
 
@@ -16,6 +17,7 @@
 #include "SuperIODevice.hpp"
 #include "WinbondFamilyDevice.hpp"
 #include "ITEDevice.hpp"
+#include "ECDevice.hpp"
 
 OSDefineMetaClassAndStructors(SMCSuperIO, IOService)
 
@@ -23,15 +25,11 @@ bool ADDPR(debugEnabled) = false;
 uint32_t ADDPR(debugPrintDelay) = 0;
 
 void SMCSuperIO::timerCallback() {
-	auto time = getCurrentTimeNs();
-	auto timerDelta = time - timerEventLastTime;
 	dataSource->update();
 	// timerEventSource->setTimeoutMS calls thread_call_enter_delayed_with_leeway, which spins.
 	// If the previous one was too long ago, schedule another one for differential recalculation!
-	if (timerDelta > MaxDeltaForRescheduleNs)
-		timerEventScheduled = timerEventSource->setTimeoutMS(TimerTimeoutMs) == kIOReturnSuccess;
-	else
-		timerEventScheduled = false;
+	timerEventSource->setTimeoutMS(TimerTimeoutMs);
+	atomic_flag_clear_explicit(&timerEventScheduled, memory_order_release);
 }
 
 IOService *SMCSuperIO::probe(IOService *provider, SInt32 *score) {
@@ -46,6 +44,8 @@ bool SMCSuperIO::start(IOService *provider) {
 		return false;
 	}
 
+	setProperty("VersionInfo", kextVersion);
+
 	auto ioreg = OSDynamicCast(IORegistryEntry, this);
 
 	dataSource = detectDevice();
@@ -55,7 +55,6 @@ bool SMCSuperIO::start(IOService *provider) {
 	}
 
 	// Prepare time sources and event loops
-	counterLock = IOSimpleLockAlloc();
 	workloop = IOWorkLoop::workLoop();
 	timerEventSource = IOTimerEventSource::timerEventSource(this, [](OSObject *object, IOTimerEventSource *sender) {
 		auto cp = OSDynamicCast(SMCSuperIO, object);
@@ -64,8 +63,8 @@ bool SMCSuperIO::start(IOService *provider) {
 		}
 	});
 
-	if (!timerEventSource || !workloop || !counterLock) {
-		SYSLOG("ssio", "failed to create workloop, timer event source, or counter lock");
+	if (!timerEventSource || !workloop) {
+		SYSLOG("ssio", "failed to create workloop or timer event source");
 		goto startFailed;
 	}
 	if (workloop->addEventSource(timerEventSource) != kIOReturnSuccess) {
@@ -96,19 +95,15 @@ bool SMCSuperIO::start(IOService *provider) {
 	return vsmcNotifier != nullptr;
 
 startFailed:
-	if (counterLock) {
-		IOSimpleLockFree(counterLock);
-		counterLock = nullptr;
-	}
 	OSSafeReleaseNULL(workloop);
 	OSSafeReleaseNULL(timerEventSource);
 	return false;
 }
 
 void SMCSuperIO::quickReschedule() {
-	if (!timerEventScheduled) {
+	if (!atomic_flag_test_and_set_explicit(&timerEventScheduled, memory_order_acquire)) {
 		// Make it 10 times faster
-		timerEventScheduled = timerEventSource->setTimeoutMS(TimerTimeoutMs/10) == kIOReturnSuccess;
+		timerEventSource->setTimeoutMS(TimerTimeoutMs/10);
 	}
 }
 
@@ -146,7 +141,33 @@ IOReturn SMCSuperIO::setPowerState(unsigned long state, IOService *whatDevice) {
 }
 
 SuperIODevice* SMCSuperIO::detectDevice() {
-	SuperIODevice* detectedDevice = WindbondFamilyDevice::detect(this);
+	SuperIODevice* detectedDevice;
+
+	auto lpc = getParentEntry(gIOServicePlane);
+	if (lpc != nullptr) {
+		if (PE_parse_boot_argn("ssioec", &deviceNameEC, sizeof(deviceNameEC))) {
+			DBGLOG("ssio", "found EC device %s", deviceNameEC);
+		} else {
+			auto name = lpc->getProperty("ec-device");
+			auto nameStr = OSDynamicCast(OSString, name);
+			auto nameData = OSDynamicCast(OSData, name);
+			if (nameStr) {
+				strlcpy(deviceNameEC, nameStr->getCStringNoCopy(), sizeof(deviceNameEC));
+				DBGLOG("ssio", "found EC device %s from string", deviceNameEC);
+			} else if (nameData) {
+				auto s = nameData->getLength();
+				if (s > sizeof(deviceNameEC)) s = sizeof(deviceNameEC);
+				strlcpy(deviceNameEC, static_cast<const char *>(nameData->getBytesNoCopy()), s);
+				DBGLOG("ssio", "found EC device %s from data", deviceNameEC);
+			}
+		}
+		detectedDevice = EC::ECDevice::detect(this, deviceNameEC, lpc);
+		if (detectedDevice) {
+			return detectedDevice;
+		}
+	}
+
+	detectedDevice = WindbondFamilyDevice::detect(this);
 	if (detectedDevice) {
 		return detectedDevice;
 	}
@@ -161,7 +182,7 @@ EXPORT extern "C" kern_return_t ADDPR(kern_start)(kmod_info_t *, void *) {
 	// Report success but actually do not start and let I/O Kit unload us.
 	// This works better and increases boot speed in some cases.
 	PE_parse_boot_argn("liludelay", &ADDPR(debugPrintDelay), sizeof(ADDPR(debugPrintDelay)));
-	ADDPR(debugEnabled) = checkKernelArgument("-vsmcdbg") || checkKernelArgument("-ssiodbg");
+	ADDPR(debugEnabled) = checkKernelArgument("-vsmcdbg") || checkKernelArgument("-ssiodbg") || checkKernelArgument("-liludbgall");
 	return KERN_SUCCESS;
 }
 

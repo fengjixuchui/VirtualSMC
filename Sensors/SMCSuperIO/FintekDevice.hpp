@@ -27,47 +27,16 @@ namespace Fintek {
 	static constexpr uint8_t FINTEK_TEMPERATURE_EXT_REG[] = { 0x7A, 0x7B, 0x7C, 0x7E };
 
 	class FintekDevice : public WindbondFamilyDevice {
-	private:
-		/**
-		 *  Tachometers
-		 */
-		uint16_t tachometers[FINTEK_MAX_TACHOMETER_COUNT] = { 0 };
-		/**
-		 *  Voltages
-		 */
-		float voltages[FINTEK_MAX_VOLTAGE_COUNT] = { 0.0 };
 	protected:
 		/**
 		 *  Implementations for tachometer reading.
 		 */
 		uint16_t tachometerRead(uint8_t);
-		void setTachometerValue(uint8_t index, uint16_t value) override {
-			if (index < getTachometerCount() && index < FINTEK_MAX_TACHOMETER_COUNT) {
-				tachometers[index] = value;
-			}
-		}
-		uint16_t getTachometerValue(uint8_t index) override {
-			if (index < getTachometerCount() && index < FINTEK_MAX_TACHOMETER_COUNT) {
-				return tachometers[index];
-			}
-			return 0;
-		}
 		/**
 		 * Reads voltage data. Invoked from update() only.
 		 */
 		float voltageRead(uint8_t);
 		float voltageRead71808E(uint8_t);
-		void setVoltageValue(uint8_t index, float value) override {
-			if (index < getVoltageCount() && index < FINTEK_MAX_VOLTAGE_COUNT) {
-				voltages[index] = value;
-			}
-		}
-		float getVoltageValue(uint8_t index) override {
-			if (index < getVoltageCount() && index < FINTEK_MAX_VOLTAGE_COUNT) {
-				return voltages[index];
-			}
-			return 0.0f;
-		}
 		/**
 		 *  Device access
 		 */

@@ -29,17 +29,27 @@ namespace Nuvoton {
 	static constexpr uint16_t NUVOTON_VBAT_REG 					= 0x488;
 	static constexpr uint16_t NUVOTON_VBAT_6775_REG				= 0x551;
 	static constexpr uint16_t NUVOTON_VBAT_CONTROL_REG			= 0x5D;
+	// NCT6683 specific data
+	static constexpr uint8_t NUVOTON_6683_PAGE_REGISTER_OFFSET	= 0x04;
+	static constexpr uint8_t NUVOTON_6683_INDEX_REGISTER_OFFSET	= 0x05;
+	static constexpr uint8_t NUVOTON_6683_DATA_REGISTER_OFFSET	= 0x06;
+	static constexpr uint8_t NUVOTON_6683_EVENT_REGISTER_OFFSET	= 0x07;
+	static constexpr uint8_t NUVOTON_6683_MON_NUMS				= 32;
+	static constexpr uint16_t NUVOTON_6683_MON_REGISTER_OFFSET	= 0x100;
+	static constexpr uint16_t NUVOTON_6683_MON_CFG_OFFSET		= 0x1A0;
+	static constexpr uint16_t NUVOTON_6683_MON_VOLTAGE_START	= 0x60;
+	static constexpr uint8_t NUVOTON_6683_FAN_NUMS				= 16;
+	static constexpr uint16_t NUVOTON_6683_FAN_REGS[] = { 0x142, 0x140, 0x144, 0x146, 0x148, 0x14A, 0x14C, 0x14E, 0x150, 0x152, 0x154, 0x156, 0x158, 0x15A, 0x15C, 0x15E };
+	static constexpr uint8_t NUVOTON_6683_VOLTAGE_NUMS			= 23;
 
 	class NuvotonDevice : public WindbondFamilyDevice {
-		/**
-		 *  Tachometers
-		 */
-		uint16_t tachometers[NUVOTON_MAX_TACHOMETER_COUNT] = { 0 };
-		/**
-		 *  Voltages
-		 */
-		float voltages[NUVOTON_MAX_VOLTAGE_COUNT] = { 0.0 };
+
 	protected:
+		/**
+		 * Mapped voltage register for NCT6683
+		 */
+		uint16_t nuvoton6683VoltageRegs[NUVOTON_6683_VOLTAGE_NUMS] = {0};
+
 		/**
 		 * On power-on init for 679XX devices.
 		 */
@@ -49,46 +59,33 @@ namespace Nuvoton {
 		 */
 		uint16_t tachometerRead(uint8_t);
 		uint16_t tachometerRead6776(uint8_t);
-		void setTachometerValue(uint8_t index, uint16_t value) override {
-			if (index < getTachometerCount() && index < NUVOTON_MAX_TACHOMETER_COUNT) {
-				tachometers[index] = value;
-			}
-		}
-		uint16_t getTachometerValue(uint8_t index) override {
-			if (index < getTachometerCount() && index < NUVOTON_MAX_TACHOMETER_COUNT) {
-				return tachometers[index];
-			}
-			return 0;
-		}
+		uint16_t tachometerRead6683(uint8_t);
 
 		/**
 		 * Reads voltage data. Invoked from update() only.
 		 */
 		float voltageRead(uint8_t);
 		float voltageRead6775(uint8_t);
-		void setVoltageValue(uint8_t index, float value) override {
-			if (index < getVoltageCount() && index < NUVOTON_MAX_VOLTAGE_COUNT) {
-				voltages[index] = value;
-			}
-		}
-		float getVoltageValue(uint8_t index) override {
-			if (index < getVoltageCount() && index < NUVOTON_MAX_VOLTAGE_COUNT) {
-				return voltages[index];
-			}
-			return 0.0f;
-		}
-		
+		float voltageRead6683(uint8_t);
+
+		/**
+		 * Mapping monitor regs to voltage regs for 6683 devices.
+		 */
+		void voltageMapping6683();
+
 	public:
 		/**
 		 * Reads a byte from device's register
 		 */
 		uint8_t readByte(uint16_t reg);
-		
+		uint8_t readByte6683(uint16_t reg);
+
 		/**
 		 * Writes a byte into device's register
 		 */
 		void writeByte(uint16_t reg, uint8_t value);
-		
+		void writeByte6683(uint16_t reg, uint8_t value);
+
 		/**
 		 *  Overrides
 		 */

@@ -63,9 +63,17 @@
 		CE335AE22096739C00C60A5F /* rtcread.c in Sources */ = {isa = PBXBuildFile; fileRef = CE335AE12096739C00C60A5F /* rtcread.c */; };
 		CE3BD6941F48BE1900A03466 /* smcread.c in Sources */ = {isa = PBXBuildFile; fileRef = CE3BD6931F48BE1900A03466 /* smcread.c */; };
 		CE405ED91E4A080700AA0B3D /* plugin_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE405ED81E4A080700AA0B3D /* plugin_start.cpp */; };
+		CE462B5C260F770700B391DB /* ECDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CE462B5A260F770700B391DB /* ECDevice.hpp */; };
+		CE462B5D260F770700B391DB /* ECDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE462B5B260F770700B391DB /* ECDevice.cpp */; };
+		CE462B6B260F81BF00B391DB /* ECDeviceNUC.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CE462B6A260F81BF00B391DB /* ECDeviceNUC.hpp */; };
+		CE462B79260F83F800B391DB /* ECDeviceNUC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE462B78260F83F800B391DB /* ECDeviceNUC.cpp */; };
+		CE462BA1260FC0BB00B391DB /* ECDeviceDebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE462B9F260FC0BB00B391DB /* ECDeviceDebug.cpp */; };
+		CE462BA2260FC0BB00B391DB /* ECDeviceDebug.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CE462BA0260FC0BB00B391DB /* ECDeviceDebug.hpp */; };
 		CE744A981F431FEC0077C377 /* kern_handler.S in Sources */ = {isa = PBXBuildFile; fileRef = CE744A961F431FEC0077C377 /* kern_handler.S */; };
 		CE744A991F431FEC0077C377 /* kern_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = CE744A971F431FEC0077C377 /* kern_handler.h */; };
 		CE775919211EBD910063EAE6 /* KeyImplementations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE775917211EBD910063EAE6 /* KeyImplementations.cpp */; };
+		CE853E4E261E629700B82635 /* ECDeviceGeneric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE853E4C261E629700B82635 /* ECDeviceGeneric.cpp */; };
+		CE853E4F261E629700B82635 /* ECDeviceGeneric.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CE853E4D261E629700B82635 /* ECDeviceGeneric.hpp */; };
 		CE8D9F7F2517B58C008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D9F7E2517B58C008C44E8 /* libkmod.a */; };
 		CE8D9F802517B599008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D9F7E2517B58C008C44E8 /* libkmod.a */; };
 		CE8D9F812517B59D008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8D9F7E2517B58C008C44E8 /* libkmod.a */; };
@@ -82,6 +90,10 @@
 		CEC803821FFC8BFA008544A7 /* kern_intrs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CEC803801FFC8BFA008544A7 /* kern_intrs.hpp */; };
 		CED5DBE820AAB6E6001FE8CF /* kern_efiend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED5DBE720AAB6E6001FE8CF /* kern_efiend.cpp */; };
 		DF412897249556C70071334F /* SSDT-BATC.dsl in Resources */ = {isa = PBXBuildFile; fileRef = DF412896249556C60071334F /* SSDT-BATC.dsl */; };
+		F61454732527962900A84C06 /* kern_hooks.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F6145471252794DE00A84C06 /* kern_hooks.hpp */; };
+		F61454742527963E00A84C06 /* kern_hooks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6145472252794DF00A84C06 /* kern_hooks.cpp */; };
+		F61454752527963E00A84C06 /* kern_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F61454702527945C00A84C06 /* kern_start.cpp */; };
+		F63CAF8725279FFB00D22631 /* plugin_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE405ED81E4A080700AA0B3D /* plugin_start.cpp */; };
 		F68156982496B4AC007C21AD /* SMCDellSensors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F68156962496B235007C21AD /* SMCDellSensors.hpp */; };
 		F68156992496B4C4007C21AD /* SMCDellSensors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F68156972496B235007C21AD /* SMCDellSensors.cpp */; };
 		F681569A2496B572007C21AD /* KeyImplementations.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F68156872496B0BC007C21AD /* KeyImplementations.hpp */; };
@@ -353,6 +365,13 @@
 		CE405ED21E49F9FC00AA0B3D /* kern_api.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kern_api.hpp; sourceTree = "<group>"; };
 		CE405ED81E4A080700AA0B3D /* plugin_start.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = plugin_start.cpp; sourceTree = "<group>"; };
 		CE405EDA1E4A080F00AA0B3D /* plugin_start.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = plugin_start.hpp; sourceTree = "<group>"; };
+		CE462B5A260F770700B391DB /* ECDevice.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ECDevice.hpp; sourceTree = "<group>"; };
+		CE462B5B260F770700B391DB /* ECDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ECDevice.cpp; sourceTree = "<group>"; };
+		CE462B6A260F81BF00B391DB /* ECDeviceNUC.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ECDeviceNUC.hpp; sourceTree = "<group>"; };
+		CE462B78260F83F800B391DB /* ECDeviceNUC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ECDeviceNUC.cpp; sourceTree = "<group>"; };
+		CE462B92260FAE5700B391DB /* EmbeddedControllers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = EmbeddedControllers.md; path = Docs/EmbeddedControllers.md; sourceTree = "<group>"; };
+		CE462B9F260FC0BB00B391DB /* ECDeviceDebug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ECDeviceDebug.cpp; sourceTree = "<group>"; };
+		CE462BA0260FC0BB00B391DB /* ECDeviceDebug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ECDeviceDebug.hpp; sourceTree = "<group>"; };
 		CE4CDECC2130955B00C29849 /* SensorInfo.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = SensorInfo.md; path = Docs/SensorInfo.md; sourceTree = "<group>"; };
 		CE5265771F552AAB00411967 /* hidesym.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = hidesym.txt; sourceTree = "<group>"; };
 		CE66E8431F49EDA100D100AF /* smcfwdump.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = smcfwdump.sh; sourceTree = "<group>"; };
@@ -364,6 +383,8 @@
 		CE83AE401FFA825F00D9C958 /* SMCKeysMacPro.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = SMCKeysMacPro.html; path = Docs/SMCKeysMacPro.html; sourceTree = "<group>"; };
 		CE83AE411FFA825F00D9C958 /* SMCKeys.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SMCKeys.txt; path = Docs/SMCKeys.txt; sourceTree = "<group>"; };
 		CE83AE421FFA826E00D9C958 /* SMCModels.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SMCModels.txt; path = Docs/SMCModels.txt; sourceTree = "<group>"; };
+		CE853E4C261E629700B82635 /* ECDeviceGeneric.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ECDeviceGeneric.cpp; sourceTree = "<group>"; };
+		CE853E4D261E629700B82635 /* ECDeviceGeneric.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ECDeviceGeneric.hpp; sourceTree = "<group>"; };
 		CE8D9F7E2517B58C008C44E8 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = ../Lilu/MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		CEA5AAB22129ACEB0001F426 /* SMCBasics.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SMCBasics.txt; path = Docs/SMCBasics.txt; sourceTree = "<group>"; };
 		CEA5AAB72129AF3A0001F426 /* libaistat.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libaistat.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -393,6 +414,9 @@
 		CED5DBE720AAB6E6001FE8CF /* kern_efiend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kern_efiend.cpp; sourceTree = "<group>"; };
 		CEF2169D216937F200378E02 /* AppleSmc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleSmc.h; sourceTree = "<group>"; };
 		DF412896249556C60071334F /* SSDT-BATC.dsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "SSDT-BATC.dsl"; path = "Docs/SSDT-BATC.dsl"; sourceTree = "<group>"; };
+		F61454702527945C00A84C06 /* kern_start.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_start.cpp; sourceTree = "<group>"; };
+		F6145471252794DE00A84C06 /* kern_hooks.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_hooks.hpp; sourceTree = "<group>"; };
+		F6145472252794DF00A84C06 /* kern_hooks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_hooks.cpp; sourceTree = "<group>"; };
 		F68156842496AFCF007C21AD /* SMCDellSensors.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SMCDellSensors.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		F68156872496B0BC007C21AD /* KeyImplementations.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KeyImplementations.hpp; sourceTree = "<group>"; };
 		F68156902496B0BC007C21AD /* KeyImplementations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyImplementations.cpp; sourceTree = "<group>"; };
@@ -578,6 +602,7 @@
 				CE0F048B24A460CC00FA857B /* BATC-Sample.plist */,
 				CE0F048C24A460FB00FA857B /* Dual Battery Support.md */,
 				6F8741D724CE58BA00ED8B06 /* Battery Information Supplement.md */,
+				CE462B92260FAE5700B391DB /* EmbeddedControllers.md */,
 				CE83AE421FFA826E00D9C958 /* SMCModels.txt */,
 				CE83AE401FFA825F00D9C958 /* SMCKeysMacPro.html */,
 				CEC8037A1FFC209B008544A7 /* SMCSensorKeys.txt */,
@@ -648,6 +673,14 @@
 				ABA30FDD213371ED00256A25 /* Info.plist */,
 				ABA30FDE213371EE00256A25 /* SMCSuperIO.cpp */,
 				ABA30FDF213371EE00256A25 /* SMCSuperIO.hpp */,
+				CE462B5B260F770700B391DB /* ECDevice.cpp */,
+				CE462B5A260F770700B391DB /* ECDevice.hpp */,
+				CE462B78260F83F800B391DB /* ECDeviceNUC.cpp */,
+				CE462B6A260F81BF00B391DB /* ECDeviceNUC.hpp */,
+				CE853E4C261E629700B82635 /* ECDeviceGeneric.cpp */,
+				CE853E4D261E629700B82635 /* ECDeviceGeneric.hpp */,
+				CE462B9F260FC0BB00B391DB /* ECDeviceDebug.cpp */,
+				CE462BA0260FC0BB00B391DB /* ECDeviceDebug.hpp */,
 				AB8CD0C321693FD4002FB4D2 /* NuvotonDevice.cpp */,
 				AB8CD0C421693FD4002FB4D2 /* NuvotonDevice.hpp */,
 				AB450EEF21723D2A00B46D12 /* WinbondDevice.cpp */,
@@ -821,6 +854,9 @@
 		F68156862496B0BC007C21AD /* SMCDellSensors */ = {
 			isa = PBXGroup;
 			children = (
+				F6145472252794DF00A84C06 /* kern_hooks.cpp */,
+				F6145471252794DE00A84C06 /* kern_hooks.hpp */,
+				F61454702527945C00A84C06 /* kern_start.cpp */,
 				F68156A02498FD28007C21AD /* SMIState.hpp */,
 				F681569D2496B624007C21AD /* SMIMonitor.cpp */,
 				F681569C2496B624007C21AD /* SMIMonitor.hpp */,
@@ -882,10 +918,14 @@
 			files = (
 				AB8181E12380778C00244152 /* ITEDevice.hpp in Headers */,
 				AB8181DF2380445400244152 /* FintekDevice.hpp in Headers */,
+				CE853E4F261E629700B82635 /* ECDeviceGeneric.hpp in Headers */,
 				AB8181DD237F0E8F00244152 /* WinbondDevice.hpp in Headers */,
+				CE462B5C260F770700B391DB /* ECDevice.hpp in Headers */,
 				AB445549216A8EF80011E44E /* NuvotonDevice.hpp in Headers */,
 				AB4804E92172B97500683636 /* WinbondFamilyDevice.hpp in Headers */,
 				ABE841742378CB1C003B5FEF /* Devices.hpp in Headers */,
+				CE462B6B260F81BF00B391DB /* ECDeviceNUC.hpp in Headers */,
+				CE462BA2260FC0BB00B391DB /* ECDeviceDebug.hpp in Headers */,
 				AB445546216A8EED0011E44E /* SuperIODevice.hpp in Headers */,
 				AB445547216A8EF20011E44E /* SMCSuperIO.hpp in Headers */,
 			);
@@ -902,6 +942,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F61454732527962900A84C06 /* kern_hooks.hpp in Headers */,
 				F68156A12498FD42007C21AD /* SMIState.hpp in Headers */,
 				F681569E2496B640007C21AD /* SMIMonitor.hpp in Headers */,
 				F681569A2496B572007C21AD /* KeyImplementations.hpp in Headers */,
@@ -1160,7 +1201,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = vit9696;
 				TargetAttributes = {
 					1C748C261C21952C0024EED2 = {
@@ -1353,9 +1394,13 @@
 			files = (
 				AB8181E22380779400244152 /* ITEDevice.cpp in Sources */,
 				AB8181E02380445F00244152 /* FintekDevice.cpp in Sources */,
+				CE462B79260F83F800B391DB /* ECDeviceNUC.cpp in Sources */,
 				AB8181DE237F0E9B00244152 /* WinbondDevice.cpp in Sources */,
 				AB4804E82172B97500683636 /* WinbondFamilyDevice.cpp in Sources */,
+				CE853E4E261E629700B82635 /* ECDeviceGeneric.cpp in Sources */,
 				AB3F62662169880300E4EFFD /* NuvotonDevice.cpp in Sources */,
+				CE462BA1260FC0BB00B391DB /* ECDeviceDebug.cpp in Sources */,
+				CE462B5D260F770700B391DB /* ECDevice.cpp in Sources */,
 				ABA30FE0213371EE00256A25 /* SMCSuperIO.cpp in Sources */,
 				ABA30FE32134A7F600256A25 /* SuperIODevice.cpp in Sources */,
 				ABE841722378CB1C003B5FEF /* Devices.cpp in Sources */,
@@ -1416,6 +1461,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F63CAF8725279FFB00D22631 /* plugin_start.cpp in Sources */,
+				F61454742527963E00A84C06 /* kern_hooks.cpp in Sources */,
+				F61454752527963E00A84C06 /* kern_start.cpp in Sources */,
 				F681569F2496B649007C21AD /* SMIMonitor.cpp in Sources */,
 				F681569B2496B581007C21AD /* KeyImplementations.cpp in Sources */,
 				F68156992496B4C4007C21AD /* SMCDellSensors.cpp in Sources */,
@@ -1556,7 +1604,7 @@
 				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				MODULE_VERSION = 1.1.7;
+				MODULE_VERSION = 1.2.5;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
@@ -1607,7 +1655,7 @@
 				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				MODULE_VERSION = 1.1.7;
+				MODULE_VERSION = 1.2.5;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALID_ARCHS = x86_64;
@@ -2279,7 +2327,7 @@
 				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				MODULE_VERSION = 1.1.7;
+				MODULE_VERSION = 1.2.5;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
@@ -2916,6 +2964,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MODULE_VERSION=$(MODULE_VERSION)",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
+					"LILU_CUSTOM_IOKIT_INIT=1",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -2968,6 +3017,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MODULE_VERSION=$(MODULE_VERSION)",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
+					"LILU_CUSTOM_IOKIT_INIT=1",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -3021,6 +3071,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MODULE_VERSION=$(MODULE_VERSION)",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
+					"LILU_CUSTOM_IOKIT_INIT=1",
 				);
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/Lilu.kext/Contents/Resources",

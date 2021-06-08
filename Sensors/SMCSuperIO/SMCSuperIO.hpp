@@ -34,6 +34,11 @@ public:
 	
 private:
 	/**
+	 *  EC device name
+	 */
+	char deviceNameEC[64] {};
+
+	/**
 	 *  Power states we monitor
 	 */
 	IOPMPowerState powerStates[PowerStateMax]  {
@@ -102,7 +107,7 @@ private:
 	/**
 	 *  Timer scheduling status
 	 */
-	bool timerEventScheduled {false};
+	atomic_flag timerEventScheduled = {};
 
 	/**
 	 *  Refresh sensor state on timer basis
@@ -115,11 +120,6 @@ private:
 	 */
 	SuperIODevice* detectDevice();
 public:
-	/**
-	 *  Sensor access lock
-	 */
-	IOSimpleLock *counterLock {nullptr};
-	
 	/**
 	 *  Decide on whether to load or not by checking the processor compatibility.
 	 *
@@ -154,7 +154,7 @@ public:
 	/**
 	 *  Submit the keys to received VirtualSMC service.
 	 *
-	 *  @param sensors   SensorsCPU service
+	 *  @param sensors   Sensors service
 	 *  @param refCon    reference
 	 *  @param vsmc      VirtualSMC service
 	 *  @param notifier  created notifier

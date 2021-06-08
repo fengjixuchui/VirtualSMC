@@ -6,6 +6,7 @@
 //
 
 #include "SMCLightSensor.hpp"
+#include <Headers/kern_version.hpp>
 
 OSDefineMetaClassAndStructors(SMCLightSensor, IOService)
 
@@ -108,6 +109,8 @@ bool SMCLightSensor::start(IOService *provider) {
 		return false;
 	}
 
+	setProperty("VersionInfo", kextVersion);
+
 	vsmcNotifier = VirtualSMCAPI::registerHandler(vsmcNotificationHandler, this);
 	return vsmcNotifier != nullptr;
 }
@@ -188,7 +191,7 @@ EXPORT extern "C" kern_return_t ADDPR(kern_start)(kmod_info_t *, void *) {
 	// Report success but actually do not start and let I/O Kit unload us.
 	// This works better and increases boot speed in some cases.
 	PE_parse_boot_argn("liludelay", &ADDPR(debugPrintDelay), sizeof(ADDPR(debugPrintDelay)));
-	ADDPR(debugEnabled) = checkKernelArgument("-vsmcdbg") || checkKernelArgument("-alsddbg");
+	ADDPR(debugEnabled) = checkKernelArgument("-vsmcdbg") || checkKernelArgument("-alsddbg") || checkKernelArgument("-liludbgall");
 	return KERN_SUCCESS;
 }
 
