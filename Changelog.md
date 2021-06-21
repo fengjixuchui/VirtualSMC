@@ -1,7 +1,8 @@
 VirtualSMC Changelog
 ====================
 #### v1.2.5
-- Added preliminary 12.0 support
+- Added preliminary macOS 12 support
+- Added macOS 10.6 support for SMCBatteryManager
 
 #### v1.2.4
 - Added support for NCT6683D series
